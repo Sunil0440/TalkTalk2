@@ -1,0 +1,14 @@
+{
+  "name": "talktalk",
+  "version": "1.0.0",
+  "description": "Anonymous chat app with video and text chat, like Omegle. All-in-one deploy.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.5",
+    "cors": "^2.8.5"
+  }
+}
