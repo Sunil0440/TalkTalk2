@@ -446,3 +446,85 @@
     resetChat();
     await startCamera();
     setChatEnabled(false);
+    setSkipVisible(false);
+    setTerminateEnabled(true);
+
+    if (socket) socket.disconnect();
+
+    socket = io();
+    setupSocket();
+  };
+
+  box.addEventListener('submit', e => {
+    e.preventDefault();
+    if (!msg.value.trim() || send.disabled) return;
+    socket.emit("message", msg.value);
+    appendBubble("chat-you", msg.value, "msg-bubble bubble-you");
+    msg.value = "";
+    msg.focus();
+  });
+
+  skip.onclick = () => {
+    if (!active) return;
+    socket.emit("skip");
+    appendSystemMsg("You skipped this stranger. Matching you to another...");
+    setWaiting(true);
+    setChatEnabled(false);
+    setSkipVisible(false);
+    resetChat();
+  };
+
+  terminate.onclick = () => {
+    appendSystemMsg("You have terminated the chat.");
+    setChatEnabled(false);
+    setSkipVisible(false);
+    setTerminateEnabled(false);
+    setStartEnabled(true);
+    setWaiting(false);
+    if (socket) socket.disconnect();
+    resetChat();
+    callscreen.style.visibility = "hidden";
+    stopCamera();
+  };
+
+  msg.onkeyup = (e) => {
+    if (e.key === "Enter") send.click();
+  };
+
+  function setupSocket() {
+    socket.on("waiting", () => {
+      setWaiting(true);
+      setChatEnabled(false);
+      setSkipVisible(false);
+      appendSystemMsg("Waiting for a stranger...");
+    });
+    socket.on("chat_start", () => {
+      setWaiting(false);
+      setChatEnabled(true);
+      setSkipVisible(true);
+      resetChat();
+      appendSystemMsg("Connected to a stranger! Say hi.");
+      msg.focus();
+    });
+    socket.on("message", (m) => {
+      appendBubble("chat-stranger", m, "msg-bubble bubble-stranger");
+    });
+    socket.on("partner_left", () => {
+      appendSystemMsg("Stranger disconnected.");
+      setWaiting(true);
+      setChatEnabled(false);
+      setSkipVisible(false);
+    });
+    socket.on("disconnect", () => {
+      appendSystemMsg("Disconnected from server.");
+      setWaiting(false);
+      setStartEnabled(true);
+      setChatEnabled(false);
+      setSkipVisible(false);
+      setTerminateEnabled(false);
+    });
+  }
+</script>
+
+</body>
+</html>
