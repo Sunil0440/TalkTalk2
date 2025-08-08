@@ -7,11 +7,12 @@ const { Server } = require('socket.io');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Serve static frontend
+// Serve static frontend files from 'public' folder
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: { origin: "*", methods: ["GET", "POST"] }
 });
@@ -48,8 +49,9 @@ io.on('connection', (socket) => {
       socket.partner = null;
     }
 
-    if (waitingUser === socket)
+    if (waitingUser === socket) {
       waitingUser = null;
+    }
 
     // Try to pair again immediately
     if (waitingUser) {
@@ -70,11 +72,14 @@ io.on('connection', (socket) => {
       socket.partner.emit('partner_left');
       socket.partner.partner = null;
     }
-    if (waitingUser === socket)
+
+    if (waitingUser === socket) {
       waitingUser = null;
+    }
   });
 });
 
 server.listen(PORT, () => {
   console.log(`Talk Talk server running on port ${PORT}`);
 });
+
