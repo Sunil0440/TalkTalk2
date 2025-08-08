@@ -53,12 +53,21 @@
       flex: 0 0 190px; min-height: 190px; max-height: 190px;
     }
     .video-container {
-      flex: 1 1 50%;
-      background: #000;
-      border-radius: var(--radius);
-      position: relative;
-      box-shadow: 0 2px 12px #0009;
-      overflow: hidden;
+  flex: 1 1 48%;
+  background: #222;
+  border-radius: 12px;
+  /* Increase height from 190px to 280px or suitable size */
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 2px 12px #0009;
+  margin-right: 8px;
+}
+.video-container:last-child {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
     }
     video {
       width: 100%;
@@ -414,3 +423,4 @@
 </script>
 </body>
 </html>
+
