@@ -76,10 +76,15 @@ io.on('connection', (socket) => {
     if (waitingUser === socket) {
       waitingUser = null;
     }
-  });
+    // Start the HTTP server and listen on all network interfaces
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Talk Talk server running on port ${PORT}`);
+});
+});
 });
 
 server.listen(PORT, () => {
   console.log(`Talk Talk server running on port ${PORT}`);
 });
+
 
